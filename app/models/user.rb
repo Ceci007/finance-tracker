@@ -1,20 +1,21 @@
 class User < ApplicationRecord
   has_many :user_stocks
   has_many :stocks, through: :user_stocks
-  has_many :friendships 
+  has_many :friendships
   has_many :friends, through: :friendships
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  def stock_already_tracked?(ticker_symbol) 
+  def stock_already_tracked?(ticker_symbol)
     stock = Stock.check_db(ticker_symbol)
-    return false unless stock 
+    return false unless stock
+
     stocks.where(id: stock.id).exists?
   end
 
-  def under_stock_limit? 
+  def under_stock_limit?
     stocks.count < 5
   end
 
@@ -22,15 +23,17 @@ class User < ApplicationRecord
     under_stock_limit? && !stock_already_tracked?(ticker_symbol)
   end
 
-  def full_name 
+  def full_name
     return "#{first_name} #{last_name}" if first_name || last_name
-    "Anonymous"
+
+    'Anonymous'
   end
 
   def self.search(param)
     param.strip!
     to_send_back = (first_name_matches(param) + last_name_matches(param) + email_matches(param)).uniq
-    return nil unless to_send_back 
+    return nil unless to_send_back
+
     to_send_back
   end
 
@@ -50,11 +53,11 @@ class User < ApplicationRecord
     where("#{field_name} like ?", "%#{param}%")
   end
 
-  def except_current_user(users) 
-    users.reject { |user| user.id == self.id }
+  def except_current_user(users)
+    users.reject { |user| user.id == id }
   end
 
-  def not_friends_with?(friend_id) 
-    !self.friends.where(id: friend_id).exists?
+  def not_friends_with?(friend_id)
+    !friends.where(id: friend_id).exists?
   end
 end
