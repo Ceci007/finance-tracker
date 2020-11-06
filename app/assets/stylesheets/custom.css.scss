@@ -14,13 +14,16 @@
 
 .results-block {
   display: inline-block;
+  margin-bottom: 1rem;
 }
 
 .messages-ajax {
-  display: block;
+  display: inline-block;
   margin: 0 auto;
+  margin-left: 20px;
+  margin-bottom: 1rem;
 }
 
 #results {
-  margin-left: -54px !important;
+  margin-left: -34px !important;
 }

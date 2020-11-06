@@ -19,3 +19,7 @@
 <div id="results">
 
 </div>
+
+<% unless @tracked_stocks.empty? %>
+  <%= render partial: 'stocks/list', locals: { tracked_stocks: @tracked_stocks } %>
+<% end %>
